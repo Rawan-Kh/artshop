@@ -15,9 +15,16 @@ mysqli_select_db($link,"artshop");
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
 
     <!-- Custom StyleSheet -->
-    <link rel="stylesheet" href="./css/styles.css" />
-    <link rel="stylesheet" href="./css/pagination.css" />
-    <link rel="stylesheet" href="./css/A_green.css" />
+    <link rel="stylesheet" href="./usercss/styles.css" />
+    <link rel="stylesheet" href="./usercss/pagination.css" />
+    <link rel="stylesheet" href="./usercss/A_green.css" />
+    <link href="usercss/bootstraper.min.css" rel="stylesheet">
+    <!-- <link href="css/font-awesome.min.css" rel="stylesheet"> -->
+    <!-- <link href="css/prettyPhoto.css" rel="stylesheet"> -->
+    <!-- <link href="css/price-range.css" rel="stylesheet"> -->
+    <!-- <link href="css/animate.css" rel="stylesheet"> -->
+    <link href="usercss/all.css" rel="stylesheet">
+    <!-- <link href="css/responsive.css" rel="stylesheet"> -->
     <title>artshop | products</title>
 </head>
 
@@ -63,8 +70,14 @@ mysqli_select_db($link,"artshop");
 
     <!-- All Products -->
     <section class="section all-products" id="products">
-        <div class="top container">
-            <h1>All Products</h1>
+        <div class="top container">        
+             <form>
+                <select>
+                    <option value="1">USD</option>
+                    <option value="2">EGP</option>
+                </select>
+                <span><i class='bx bx-chevron-down'></i></span>
+            </form>  
             <form>
                 <select>
                     <option value="1">Defualt Sorting</option>
@@ -75,57 +88,52 @@ mysqli_select_db($link,"artshop");
                 </select>
                 <span><i class='bx bx-chevron-down'></i></span>
             </form>
+                        </div>
+              </div>
         </div>
+       
+                <div class="features_items">
+                    <h2 class="title text-center">all products</h2>
 
-  <!-- pagination  -->
-<?php
+                   <?php
+
  include("pagination.php");
  $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
-    	$limit = 7; //if you want to dispaly 10 records per page then you have to change here
+    	$limit = 16; //if you want to dispaly 10 records per page then you have to change here
     	$startpoint = ($page * $limit) - $limit;
         $statement = "product"; //you have to pass your query over here
 
 $res=mysqli_query($link,"select * from {$statement} LIMIT {$startpoint} , {$limit}");
-    ?>
-    <div class="product-center container">
-    <table>
-<?php
-$i=0;
-while($row=mysqli_fetch_array($res)){
-    if($i % 3==0){
-        echo "<td>";
-        echo"<tr>";
-        ?>
-        <div class="product">
-        <div class="product-header">
-       <img src="../adminpanel/<?php echo $row["product_img"]; ?>" />
-       <ul class="icons">
-           <span><i class="bx bx-heart"></i></span>
-           <a href="cart.html"> <span><i class="bx bx-shopping-bag"></i></span>
-           </a>
-           <span><i class="bx bx-search"></i></span>
-       </ul>
-   </div>
-   <div class="product-footer">
-       <a href="product-details.html"><h3> <?php echo $row["product_name"]; ?></h3></a>
-       <h4 class="price">$<?php echo $row["product_price"]; ?></h4>
-   </div>
-   </div>
-   <?php
-        echo "</tr>";
-    }
-    $i++;
-
-   
-if( $i % 3 == 2){
-   
-echo "</td>";
-}
-}
+while($row=mysqli_fetch_array($res))
+{
 ?>
+ <div class="col-sm-3">
+                        <div class="product-image-wrapper">
+                         
+                            <div class="single-products">
+                            <!-- <div class="product"> -->
+                                <div class="productinfo text-center">
+                                   <img src="../adminpanel/<?php echo $row["product_img"]; ?>" />
+                                   <!-- <div class="product-footer"> -->
+                                <div class="productinfo text-center">
+                                    <h2>$<?php echo $row["product_price"]; ?></h2>
+                                    <p><?php echo $row["product_name"]; ?></p>
+                                    <a href="product_details.php?id=<?php echo $row["id"]; ?>" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>View Description</a>
+                                
+                                </div>
+                                </div>
+                               
+                            </div>
+                           
+                        </div>
+                    </div>
 
-</table>
-</div>
+<?php
+
+}
+                    ?>
+                  </div>
+
 <ul class="pagination">
 <?php
     echo pagination($statement,$limit,$page);
